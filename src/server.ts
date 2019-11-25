@@ -1,6 +1,7 @@
-import express from 'express';
+import express, {Router, Response, Request} from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import { filter } from 'bluebird';
 
 (async () => {
 
@@ -13,8 +14,12 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
 
-  app.get("/filteredimage/", (req: Request, res: Response) =>{
+  app.get("/filteredimage/", async (req: Request, res: Response) =>{
     let {image_url} = req.query;
+    let abs_path = await filterImageFromURL(image_url);
+    console.log(abs_path)
+    await res.sendFile(abs_path);
+    deleteLocalFiles([abs_path]);
 
   });
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
