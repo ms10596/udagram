@@ -17,10 +17,9 @@ import { filter } from 'bluebird';
   app.get("/filteredimage/", async (req: Request, res: Response) =>{
     let {image_url} = req.query;
     let abs_path = await filterImageFromURL(image_url);
-    console.log(abs_path)
-    await res.sendFile(abs_path);
-    deleteLocalFiles([abs_path]);
-
+    res.sendFile(abs_path,function() {
+      deleteLocalFiles([abs_path]);
+    });
   });
   // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
   // GET /filteredimage?image_url={{URL}}
