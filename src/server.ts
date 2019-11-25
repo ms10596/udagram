@@ -22,7 +22,7 @@ import { filter } from 'bluebird';
       return res.status(400).send("image url is required");
     }
     if(!isImageUrl(image_url)) {
-      return res.status(400).send("could not find the image in the url");
+      return res.status(422).send("could not find the image in the url");
     }
   
     let abs_path = await filterImageFromURL(image_url);
